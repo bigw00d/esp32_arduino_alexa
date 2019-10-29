@@ -6,3 +6,5 @@ ESP32 applications for Alexa
 
 - Arduino Version: 1.8.5
 
+
+https://lang-ship.com/blog/?p=886
