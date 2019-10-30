@@ -1,6 +1,6 @@
 # esp32_alexa_light_control
 
-Example for room light control with Alexa
+Example for room light controller with Alexa
 
 ※It only supports The NEC IR transmission protocol
 
