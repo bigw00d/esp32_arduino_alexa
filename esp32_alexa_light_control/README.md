@@ -2,15 +2,23 @@
 
 Example for room light control with Alexa
 
-※It only support The NEC IR transmission protocol
+※It only supports The NEC IR transmission protocol
 
 ## Requirement
 
 - Arduino IDE Version: 1.8.5
+- [ESPr® Developer 32](https://www.switch-science.com/catalog/3210/)
+- Alexa echo dot(3rd generation)
+- Electric Parts(see 'Pin connections')
+
+##  Pin connections
+
+<img width="80%" src="./connections.png" />  
+
 
 ## Usage
 
-1. Install libraries:
+1. Install Arduino libraries:
    - FauxmoESP(ver.3.1.0)　※1
    - AsyncTCP(ver.1.1.1)　 ※1
    - IRremoteESP8266(ver.2.6.6)　※2  
@@ -35,7 +43,7 @@ char password[] = "";
 
 4. Programming to ESP32
 
-1. Connect Smart Home Devices to Alexa: [document](https://www.amazon.com/gp/help/customer/display.html?nodeId=201749240)
+1. Connect Devices to Alexa: [document](https://www.amazon.com/gp/help/customer/display.html?nodeId=201749240)
 
 1. Just say, "Alexa. ライト ON" or "Alexa. ライト OFF" ※3  
 　  
