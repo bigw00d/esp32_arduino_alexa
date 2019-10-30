@@ -15,6 +15,7 @@ Example for room light controller with Alexa
 
 <img width="80%" src="./connections.png" />  
 
+※'LED' is Infrared LED
 
 ## Usage
 
