@@ -65,32 +65,29 @@ void setup() {
     
     fauxmo.onSetState([](unsigned char device_id, const char *device_name, bool state, unsigned char value) {
       //  If you have to do something more involved here set a flag and process it in your main loop
-      
       Serial.printf("Device #%d (%s) state: %s value: %d\n", device_id, device_name, state ? "ON" : "OFF", value);
-
       if (strcmp(device_name, "ライト") == 0) {
           if(state) {
-            Serial.println("LIGHT ON");
             alexa_event = LIGHT_ON;
           }
           else {
-            Serial.println("LIGHT OFF");
             alexa_event = LIGHT_OFF;
           }
       }
     });
+
 }
 
 void loop() {
     switch (alexa_event) {
       case LIGHT_ON:
         Serial.println("LIGHT ON");
-        irsend.sendNEC(0x1768877,32); // ON
+        irsend.sendNEC(0x1768800,32); // ON
         alexa_event = NO_EVENT;
         break;
       case LIGHT_OFF:
         Serial.println("LIGHT OFF");
-        irsend.sendNEC(0x17600FF,32); // OFF
+        irsend.sendNEC(0x17688FF,32); // OFF
         alexa_event = NO_EVENT;
         break;
       default:

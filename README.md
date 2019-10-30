@@ -6,5 +6,9 @@ ESP32 applications for Alexa
 
 - Arduino Version: 1.8.5
 
+## Examples
 
-https://lang-ship.com/blog/?p=886
+### esp32_alexa_light_control
+
+Example for room light control 
+
