@@ -9,6 +9,5 @@ ESP32 applications for Alexa
 ## Examples
 
 ### esp32_alexa_light_control
-
-Example for room light control 
+ - [Example for room light controller](./esp32_alexa_light_control) 
 
