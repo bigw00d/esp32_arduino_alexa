@@ -52,7 +52,7 @@ struct Touch {
   const uint8_t TIMEOUT_MAX_COUNT;
 };
 
-Touch touch = {TFT_T_IRQ, false, true, 0, 5};
+Touch touch = {TFT_T_IRQ, false, true, 0, 10}; //10 count -> back light off
 
 portMUX_TYPE intrMux = portMUX_INITIALIZER_UNLOCKED;
 
@@ -168,6 +168,7 @@ void setup() {
   
     tft.println("Start");
 
+    startTimer();
 }
 
 void handleEvent() {
@@ -182,6 +183,9 @@ void handleEvent() {
         delay(100);
         tft.println("LIGHT ON");
         alexa_event = NO_EVENT;
+        digitalWrite(TFT_LED, HIGH); // back light on
+        stopTimer();
+        startTimer();
         break;
       case LIGHT_OFF:
         Serial.println("LIGHT OFF");
@@ -193,10 +197,25 @@ void handleEvent() {
         delay(100);
         tft.println("LIGHT OFF");
         alexa_event = NO_EVENT;
+        digitalWrite(TFT_LED, HIGH); // back light on
+        stopTimer();
+        startTimer();
         break;
       default:
         break;
     }
+
+    if (touch.timeoutCount >= touch.TIMEOUT_MAX_COUNT) {
+      touch.timeoutCount = 0;
+      stopTimer();
+      tft.println("BACK LIGHT OFF");
+      delay(1000);
+      portENTER_CRITICAL_ISR(&intrMux);
+      touch.isDetected = false;
+      portEXIT_CRITICAL_ISR(&intrMux);
+      digitalWrite(TFT_LED, LOW); // back light off
+    }
+
 }
 
 void loop() {
@@ -239,12 +258,12 @@ void loop() {
 //      if (alexa.lightIsOn) {
 //        alexa.lightIsOn = false;
 //        Serial.println("LIGHT OFF");
-//        irsend.sendNEC(0x0000000, 32); //OFF
+//        irsend.sendNEC(LIGHT_COMMAND_OFF, 32); //OFF
 //      }
 //      else {
 //        alexa.lightIsOn = true;
 //        Serial.println("LIGHT ON");
-//        irsend.sendNEC(0x0000000, 32); //ON 
+//        irsend.sendNEC(LIGHT_COMMAND_ON, 32); //ON 
 //      }
 //
 //    }
