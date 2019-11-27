@@ -20,6 +20,7 @@
 #include <SPI.h>
 
 #include "fauxmoESP.h"
+#include "config.h"
 
 // TFT display module
 #include <gfxfont.h>
@@ -106,8 +107,8 @@ IRsend irsend(LIGHT_PIN);
 
 fauxmoESP fauxmo;
 
-char ssid[] = "Buffalo-G-05F0";
-char password[] = "kfnxi7wdn7d7w";
+char ssid[] = AP_SSID;
+char password[] = AP_PASS;
 
 volatile ALEXA_EVENT alexa_event = NO_EVENT;
 
@@ -173,22 +174,22 @@ void handleEvent() {
     switch (alexa_event) {
       case LIGHT_ON:
         Serial.println("LIGHT ON");
-        irsend.sendNEC(0x1768877,32); // ON
+        irsend.sendNEC(LIGHT_COMMAND_ON,32); // ON
         delay(50);
-        irsend.sendNEC(0x1768877,32); // ON
+        irsend.sendNEC(LIGHT_COMMAND_ON,32); // ON
         delay(50);
-        irsend.sendNEC(0x1768877,32); // ON
+        irsend.sendNEC(LIGHT_COMMAND_ON,32); // ON
         delay(100);
         tft.println("LIGHT ON");
         alexa_event = NO_EVENT;
         break;
       case LIGHT_OFF:
         Serial.println("LIGHT OFF");
-        irsend.sendNEC(0x17600FF,32); // OFF
+        irsend.sendNEC(LIGHT_COMMAND_OFF,32); // OFF
         delay(50);
-        irsend.sendNEC(0x17600FF,32); // OFF
+        irsend.sendNEC(LIGHT_COMMAND_OFF,32); // OFF
         delay(50);
-        irsend.sendNEC(0x17600FF,32); // OFF
+        irsend.sendNEC(LIGHT_COMMAND_OFF,32); // OFF
         delay(100);
         tft.println("LIGHT OFF");
         alexa_event = NO_EVENT;
@@ -238,12 +239,12 @@ void loop() {
 //      if (alexa.lightIsOn) {
 //        alexa.lightIsOn = false;
 //        Serial.println("LIGHT OFF");
-//        irsend.sendNEC(0x17600FF, 32); //OFF
+//        irsend.sendNEC(0x0000000, 32); //OFF
 //      }
 //      else {
 //        alexa.lightIsOn = true;
 //        Serial.println("LIGHT ON");
-//        irsend.sendNEC(0x1768877, 32); //ON 
+//        irsend.sendNEC(0x0000000, 32); //ON 
 //      }
 //
 //    }
