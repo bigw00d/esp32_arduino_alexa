@@ -155,6 +155,8 @@ void setup() {
       }
     });
 
+    initTouch();
+
     tft.begin();
     tft.fillScreen(ILI9341_BLACK);
     yield();
@@ -168,6 +170,8 @@ void setup() {
   
     tft.println("Start");
 
+    touch.timeoutCount = 0;
+    touch.isDetected = false;
     startTimer();
 }
 
@@ -184,6 +188,7 @@ void handleEvent() {
         tft.println("LIGHT ON");
         alexa_event = NO_EVENT;
         digitalWrite(TFT_LED, HIGH); // back light on
+        alexa.lightIsOn = true;
         stopTimer();
         startTimer();
         break;
@@ -198,6 +203,7 @@ void handleEvent() {
         tft.println("LIGHT OFF");
         alexa_event = NO_EVENT;
         digitalWrite(TFT_LED, HIGH); // back light on
+        alexa.lightIsOn = true;
         stopTimer();
         startTimer();
         break;
@@ -205,15 +211,24 @@ void handleEvent() {
         break;
     }
 
-    if (touch.timeoutCount >= touch.TIMEOUT_MAX_COUNT) {
-      touch.timeoutCount = 0;
-      stopTimer();
-      tft.println("BACK LIGHT OFF");
-      delay(1000);
-      portENTER_CRITICAL_ISR(&intrMux);
-      touch.isDetected = false;
-      portEXIT_CRITICAL_ISR(&intrMux);
-      digitalWrite(TFT_LED, LOW); // back light off
+    if (alexa.lightIsOn == false) {
+      if (touch.isDetected) {
+        digitalWrite(TFT_LED, HIGH); // back light on
+        alexa.lightIsOn = true;
+        touch.isDetected = false;
+        startTimer();
+      }
+    }
+    else {
+      if (touch.timeoutCount >= touch.TIMEOUT_MAX_COUNT) {
+        touch.timeoutCount = 0;
+        stopTimer();
+        portENTER_CRITICAL_ISR(&intrMux);
+        touch.isDetected = false;
+        portEXIT_CRITICAL_ISR(&intrMux);
+        digitalWrite(TFT_LED, LOW); // back light off
+        alexa.lightIsOn = false;
+      }
     }
 
 }
